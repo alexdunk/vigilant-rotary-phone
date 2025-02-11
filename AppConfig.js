@@ -1,3 +1,3 @@
 export const AppConfig = {
-    logLevel: 'INFO',
+    appVersion: '6969.0.0',
 };
