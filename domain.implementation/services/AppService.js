@@ -5,7 +5,7 @@ export class AppService extends IAppService {
         const _exec = () => {
             return {
                 name: 'MyApp',
-                version: '69.0.0'
+                version: '123.0.0'
             }
         }
 
