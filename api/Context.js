@@ -37,7 +37,7 @@ export class Context {
      */
     respondWithStatus(statusCode, responseValue, error = null) {
         this.response.statusCode = Number(statusCode);
-        this.response.body = responseValue;
+        this.response.body = JSON.stringify(responseValue ?? null);
 
         if (error) { }
 
