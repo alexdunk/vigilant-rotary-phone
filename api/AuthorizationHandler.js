@@ -19,6 +19,9 @@ export class AuthorizationHandler extends IRequestHandler {
         if (context?.request?.httpMethod === 'GET' && context?.request?.path === '/info')
             return await this.next(context);
 
+        if (context?.request?.httpMethod === 'POST' && context?.request?.path === '/ocr')
+            return await this.next(context);
+
         const token = this._getTokenFromHeaders(context?.request?.headers)
         try {
             const decoded = TokenValidator.verifyToken(token);

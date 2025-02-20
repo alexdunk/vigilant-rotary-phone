@@ -1,6 +1,7 @@
 import { ApplicationError } from "../common/Errors.js";
 import { IRequestHandler } from "./IRequestHandler.js";
 import { IAppService } from "../domain/services/IAppService.js";
+import { IOcrService } from "../domain/services/IOcrService.js";
 
 /**
  * Represents a service router that handles incoming requests and routes them to the appropriate service.
@@ -21,9 +22,10 @@ export class ServiceRouter extends IRequestHandler {
      * @param {IRequestHandler} next - The next request handler in the chain.
      * @param {Array} services - The list of available services.
      */
-    constructor(next, appService) {
+    constructor(next, appService, ocrService) {
         super(next);
         /** @type {IAppService} */ this._appService = appService;
+        /** @type {IOcrService} */ this._ocrService = ocrService;
     }
 
     /**
@@ -35,10 +37,16 @@ export class ServiceRouter extends IRequestHandler {
     async _routeToService(context) {
         const method = context?.request?.httpMethod;
         const path = context?.request?.path;
-        const queryStringParameters = context.request.queryStringParameters;
+        const queryStringParameters = context?.request?.queryStringParameters;
 
         if (method === 'GET' && path === '/info') {
             const result = this._appService.getAppInfo();
+            return context.respondWithStatus(200, result);
+        }
+
+        if (method === 'POST' && path === '/ocr') {
+            const documentUrl = queryStringParameters?.documentUrl;
+            const result = await this._ocrService.ocrDocument({ documentUrl });
             return context.respondWithStatus(200, result);
         }
 
